@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "error"
+  },
+  "plugins": ["react", "typescript", "import"],
+  "ignorePatterns": [
+    ".nx/**",
+    "dist/**",
+    "**/build/**",
+    "**/Pods/**",
+    "**/node_modules/**"
+  ]
+}
