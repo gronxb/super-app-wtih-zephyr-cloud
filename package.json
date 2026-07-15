@@ -16,7 +16,8 @@
     "kill:ports": "./kill-ports.sh",
     "lint": "oxfmt --check . && oxlint apps packages",
     "lint:fix": "oxfmt --write . && oxlint --fix --fix-suggestions --fix-dangerously apps packages",
-    "test:type": "nx run-many -t test:type"
+    "test:type": "nx run-many -t test:type",
+    "verify": "pnpm lint && pnpm test:type"
   },
   "devDependencies": {
     "nx": "23.1.0",
