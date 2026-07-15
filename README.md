@@ -1,5 +1,13 @@
 # Super App with Zephyr Cloud
 
+## Setup
+
+Install Node.js 20 or later, pnpm 11.6.0, and Xcode with the iOS Simulator. Then install the project dependencies from the repository root.
+
+```bash
+pnpm install
+```
+
 ## Development
 
 Build the host app for the iOS Simulator.
