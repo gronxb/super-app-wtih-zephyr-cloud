@@ -1,8 +1,10 @@
-# Gronxb Market
+# super-app-with-zephyr-cloud
 
 A React Native super app built with Metro Module Federation and Zephyr Cloud. One native host loads the independently deployable `discover` and `cart` applications while sharing a common cart store.
 
 ![Gronxb Market running on iOS](./docs/images/zephyr-release-discover.png)
+<img width="1206" height="2622" alt="simulator_screenshot_7EE35051-08C5-4733-A40E-1A469F25C352" src="https://github.com/user-attachments/assets/9a339007-8d49-4eeb-aaf8-c02beabc9aee" />
+
 
 ## Architecture
 
@@ -62,6 +64,12 @@ xcrun simctl launch booted org.reactjs.native.example.ZephyrCloudHostApp
 
 The host runs on port 8081. The `cart` and `discover` remotes run on ports 8082 and 8083.
 
+
+
+https://github.com/user-attachments/assets/e2c9dc34-2c81-4723-b247-7d5032389e98
+
+
+
 ## Zephyr Deployment
 
 Deploy the remote applications before building a new release host:
@@ -86,6 +94,13 @@ Remote-only changes can be published without rebuilding the native host:
 ```bash
 pnpm --dir apps/discover deploy:zephyr:ios
 ```
+
+
+
+
+
+
+
 
 ## Workspace Commands
 
