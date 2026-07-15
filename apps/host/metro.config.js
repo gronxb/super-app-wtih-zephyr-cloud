@@ -1,13 +1,15 @@
-const path = require('path');
+const path = require('node:path');
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+const { withZephyr } = require('zephyr-metro-plugin');
 const { withModuleFederation } = require('@module-federation/metro');
-const { getDefaultConfig, mergeConfig } = require('@rock-js/plugin-metro');
 
-const projectRoot = __dirname;
-const workspaceRoot = path.resolve(projectRoot, '../..');
 const cartPort = process.env.CART_PORT ?? '8082';
 const discoverPort = process.env.DISCOVER_PORT ?? '8083';
 
-const config = mergeConfig(getDefaultConfig(projectRoot), {
+const projectRoot = __dirname;
+const workspaceRoot = path.resolve(projectRoot, '../..');
+
+const config = {
   watchFolders: [workspaceRoot],
   resolver: {
     useWatchman: false,
@@ -16,12 +18,12 @@ const config = mergeConfig(getDefaultConfig(projectRoot), {
       path.resolve(workspaceRoot, 'node_modules'),
     ],
   },
-});
+};
 
-module.exports = withModuleFederation(
-  config,
-  {
-    name: 'host',
+
+const getConfig = async () => {
+  const zephyrConfig = await withZephyr()({
+    name: 'hostApp',
     remotes: {
       cart: `cart@http://localhost:${cartPort}/mf-manifest.json`,
       discover: `discover@http://localhost:${discoverPort}/mf-manifest.json`,
@@ -47,12 +49,19 @@ module.exports = withModuleFederation(
       },
     },
     shareStrategy: 'loaded-first',
-  },
-  {
-    flags: {
-      unstable_patchHMRClient: true,
-      unstable_patchInitializeCore: true,
-      unstable_patchRuntimeRequire: true,
+  });
+
+  return withModuleFederation(
+    mergeConfig(getDefaultConfig(__dirname), config),
+    zephyrConfig,
+    {
+      flags: {
+        unstable_patchHMRClient: true,
+        unstable_patchInitializeCore: true,
+        unstable_patchRuntimeRequire: true,
+      },
     },
-  },
-);
+  );
+};
+
+module.exports = getConfig;

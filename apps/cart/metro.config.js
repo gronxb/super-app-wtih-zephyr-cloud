@@ -1,11 +1,12 @@
-const path = require('path');
+const path = require('node:path');
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const { withModuleFederation } = require('@module-federation/metro');
-const { getDefaultConfig, mergeConfig } = require('@rock-js/plugin-metro');
+const { withZephyr } = require('zephyr-metro-plugin');
 
 const projectRoot = __dirname;
 const workspaceRoot = path.resolve(projectRoot, '../..');
 
-const config = mergeConfig(getDefaultConfig(projectRoot), {
+const config = {
   watchFolders: [workspaceRoot],
   resolver: {
     useWatchman: false,
@@ -14,11 +15,10 @@ const config = mergeConfig(getDefaultConfig(projectRoot), {
       path.resolve(workspaceRoot, 'node_modules'),
     ],
   },
-});
+};
 
-module.exports = withModuleFederation(
-  config,
-  {
+async function getConfig() {
+  const zephyrConfig = await withZephyr()({
     name: 'cart',
     filename: 'cart.bundle',
     dts: true,
@@ -35,7 +35,7 @@ module.exports = withModuleFederation(
       react: {
         singleton: true,
         eager: false,
-        requiredVersion: '19.2.7',
+         requiredVersion: '19.2.7',
         version: '19.2.7',
       },
       'react-native': {
@@ -46,12 +46,19 @@ module.exports = withModuleFederation(
       },
     },
     shareStrategy: 'loaded-first',
-  },
-  {
-    flags: {
-      unstable_patchHMRClient: true,
-      unstable_patchInitializeCore: true,
-      unstable_patchRuntimeRequire: true,
+  });
+
+  return withModuleFederation(
+    mergeConfig(getDefaultConfig(__dirname), config),
+    zephyrConfig,
+    {
+      flags: {
+        unstable_patchHMRClient: true,
+        unstable_patchInitializeCore: true,
+        unstable_patchRuntimeRequire: true,
+      },
     },
-  },
-);
+  );
+}
+
+module.exports = getConfig();

@@ -28,7 +28,8 @@
     "@rock-js/plugin-metro": "^0.14.1",
     "@rock-js/welcome-screen": "^0.14.1",
     "@types/react": "19.2.17",
-    "rock": "^0.14.1"
+    "rock": "^0.14.1",
+    "zephyr-metro-plugin": "^1.1.2"
   },
   "peerDependencies": {},
   "engines": {

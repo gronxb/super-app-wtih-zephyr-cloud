@@ -10,6 +10,7 @@
   "main": "index.js",
   "scripts": {
     "build:ios:simulator": "pnpm --filter ZephyrCloudHostApp run build:ios:simulator",
+    "build:ios:simulator:release": "pnpm --filter ZephyrCloudHostApp run build:ios:simulator:release",
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
     "kill:ports": "./kill-ports.sh",
