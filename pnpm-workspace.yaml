@@ -1,5 +1,15 @@
 packages:
   - 'apps/*'
+  - 'packages/*'
+
+peerDependencyRules:
+  allowedVersions:
+    '@module-federation/metro>metro': '0.83.7'
+    '@module-federation/metro>metro-config': '0.83.7'
+    '@module-federation/metro>metro-file-map': '0.83.7'
+    '@module-federation/metro>metro-resolver': '0.83.7'
+    '@module-federation/metro>metro-source-map': '0.83.7'
+    '@module-federation/metro-plugin-rock>@rock-js/tools': '0.14.1'
 
 allowBuilds:
   nx: true
@@ -48,3 +58,12 @@ minimumReleaseAgeExclude:
   - '@oxlint/binding-win32-x64-msvc@1.74.0'
   - oxfmt@0.59.0
   - oxlint@1.74.0
+  - '@module-federation/dts-plugin@2.8.0'
+  - '@module-federation/error-codes@2.8.0'
+  - '@module-federation/managers@2.8.0'
+  - '@module-federation/metro-plugin-rock@2.8.0'
+  - '@module-federation/metro@2.8.0'
+  - '@module-federation/runtime-core@2.8.0'
+  - '@module-federation/runtime@2.8.0'
+  - '@module-federation/sdk@2.8.0'
+  - '@module-federation/third-party-dts-extractor@2.8.0'

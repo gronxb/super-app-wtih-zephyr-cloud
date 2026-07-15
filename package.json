@@ -9,10 +9,12 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "build:ios:simulator": "pnpm --filter ZephyrCloudHostApp run build:ios:simulator",
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
-    "lint": "oxfmt --check . && oxlint apps",
-    "lint:fix": "oxfmt --write . && oxlint --fix --fix-suggestions --fix-dangerously apps",
+    "kill:ports": "./kill-ports.sh",
+    "lint": "oxfmt --check . && oxlint apps packages",
+    "lint:fix": "oxfmt --write . && oxlint --fix --fix-suggestions --fix-dangerously apps packages",
     "test:type": "nx run-many -t test:type"
   },
   "devDependencies": {

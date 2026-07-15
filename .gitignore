@@ -19,6 +19,7 @@ dist/
 
 # Rock and Metro
 .rock/
+.mf/
 .metro-health-check*
 *.jsbundle
 
@@ -72,4 +73,5 @@ coverage/
 # Local agent state
 .codegraph
 .omx/
-.debug-journal.md
+
+artifacts/

@@ -3,27 +3,31 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "rock start",
+    "start": "rock start --port 8082",
     "test:type": "tsc --noEmit",
     "ios": "rock run:ios",
     "android": "rock run:android"
   },
   "dependencies": {
-    "react": "19.2.0",
-    "react-native": "0.83.0"
+    "@gronxb-super-app/store": "workspace:*",
+    "react": "19.2.7",
+    "react-native": "0.84.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.3",
     "@babel/runtime": "^7.25.0",
-    "@react-native/babel-preset": "0.83.0",
-    "@react-native/metro-config": "0.83.0",
-    "@react-native/typescript-config": "0.83.0",
+    "@module-federation/metro": "2.8.0",
+    "@module-federation/metro-plugin-rock": "2.8.0",
+    "@module-federation/runtime": "2.8.0",
+    "@react-native/babel-preset": "0.84.1",
+    "@react-native/metro-config": "0.84.1",
+    "@react-native/typescript-config": "0.84.1",
     "@rock-js/platform-android": "^0.14.1",
     "@rock-js/platform-ios": "^0.14.1",
     "@rock-js/plugin-metro": "^0.14.1",
     "@rock-js/welcome-screen": "^0.14.1",
-    "@types/react": "^19.2.0",
+    "@types/react": "19.2.17",
     "rock": "^0.14.1"
   },
   "peerDependencies": {},
