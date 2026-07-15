@@ -1,82 +1,103 @@
-# Super App with Zephyr Cloud
+# Gronxb Market
+
+A React Native super app built with Metro Module Federation and Zephyr Cloud. One native host loads the independently deployable `discover` and `cart` applications while sharing a common cart store.
+
+![Gronxb Market running on iOS](./docs/images/zephyr-release-discover.png)
+
+## Architecture
+
+```text
+apps/host       React Native host and native iOS/Android projects
+apps/discover   Product discovery remote
+apps/cart       Shopping cart remote
+packages/store  Shared cart contract and store
+```
+
+Metro produces the React Native bundles. Module Federation defines the host, remote containers, exposed modules, shared dependencies, and runtime loading behavior. Zephyr integrates with that build lifecycle to resolve remote dependencies and publish versioned build artifacts.
+
+Only the host owns native projects. The remote applications contain JavaScript, Metro, and Module Federation configuration and can be developed and deployed independently.
+
+## Requirements
+
+- Node.js 20 or later
+- pnpm 11.6.0
+- Xcode with an iOS Simulator
+- A Zephyr Cloud account for remote deployments
 
 ## Setup
 
-Install Node.js 20 or later, pnpm 11.6.0, and Xcode with the iOS Simulator. Then install the project dependencies from the repository root.
-
 ```bash
 pnpm install
+pnpm verify
 ```
 
-## Development
+## Local Development
 
-Build the host app for the iOS Simulator.
+Build and install the debug host:
 
 ```bash
 pnpm build:ios:simulator
+xcrun simctl install booted apps/host/build/Build/Products/Debug-iphonesimulator/ZephyrCloudHostApp.app
 ```
 
-Install the generated app on the simulator:
-
-```text
-apps/host/build/Build/Products/Debug-iphonesimulator/ZephyrCloudHostApp.app
-```
-
-Start the host and both remote apps in separate terminals.
+Start the three Metro servers in separate terminals:
 
 ```bash
-cd apps/host
-pnpm start
+pnpm --dir apps/host start
 ```
 
 ```bash
-cd apps/cart
-pnpm start
+pnpm --dir apps/discover start
 ```
 
 ```bash
-cd apps/discover
-pnpm start
+pnpm --dir apps/cart start
 ```
 
-Once all three development servers are running, open the installed app.
+Launch the installed application:
 
+```bash
+xcrun simctl launch booted org.reactjs.native.example.ZephyrCloudHostApp
+```
 
+The host runs on port 8081. The `cart` and `discover` remotes run on ports 8082 and 8083.
 
-https://github.com/user-attachments/assets/ec70f9e2-b7a0-422b-8dd4-f34c645b646d
+## Zephyr Deployment
 
+Deploy the remote applications before building a new release host:
 
+```bash
+pnpm --dir apps/cart deploy:zephyr:ios
+pnpm --dir apps/discover deploy:zephyr:ios
+```
 
-## Production test
+The host resolves remote applications through the `zephyr:dependencies` field in `apps/host/package.json`. Use the Application UIDs and environment configured for your Zephyr organization.
 
-Build the release version of the host app for the iOS Simulator.
+Build and install the release host:
 
 ```bash
 pnpm build:ios:simulator:release
+xcrun simctl install booted apps/host/build/Build/Products/Release-iphonesimulator/ZephyrCloudHostApp.app
+xcrun simctl launch booted org.reactjs.native.example.ZephyrCloudHostApp
 ```
 
-Install the generated app on the simulator:
-
-```text
-apps/host/build/Build/Products/Release-iphonesimulator/ZephyrCloudHostApp.app
-```
-
-Make a visible change to each remote app, then deploy it to Zephyr Cloud.
+Remote-only changes can be published without rebuilding the native host:
 
 ```bash
-cd apps/cart
-nvim App.tsx
-pnpm deploy:zephyr:ios
+pnpm --dir apps/discover deploy:zephyr:ios
 ```
 
-```bash
-cd apps/discover
-nvim App.tsx
-pnpm deploy:zephyr:ios
-```
+## Workspace Commands
 
-After both deployments finish, open the installed app and verify that the changes are delivered from Zephyr Cloud.
+| Command                            | Description                              |
+| ---------------------------------- | ---------------------------------------- |
+| `pnpm verify`                      | Run formatting, lint, and type checks    |
+| `pnpm lint`                        | Run formatting and lint checks           |
+| `pnpm test:type`                   | Type-check all workspace projects        |
+| `pnpm build:ios:simulator`         | Build the debug iOS Simulator host       |
+| `pnpm build:ios:simulator:release` | Build the release iOS Simulator host     |
+| `pnpm kill:ports`                  | Stop the local Metro development servers |
 
+## Metro Compatibility Patch
 
-Uploading module-federation-production.mov…
-
+The workspace applies [`patches/zephyr-metro-plugin.patch`](./patches/zephyr-metro-plugin.patch) through pnpm `patchedDependencies`. It preserves Zephyr-resolved remote configuration across the additional Metro configuration load performed by the current React Native CLI integration.
