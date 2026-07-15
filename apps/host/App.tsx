@@ -61,9 +61,7 @@ function RemoteLoading() {
   return (
     <View accessibilityLiveRegion="polite" style={styles.loading}>
       <Text style={styles.loadingTitle}>Opening your shop</Text>
-      <Text style={styles.loadingBody}>
-        Connecting to the local Metro remote.
-      </Text>
+      <Text style={styles.loadingBody}>Loading the remote module.</Text>
     </View>
   );
 }
