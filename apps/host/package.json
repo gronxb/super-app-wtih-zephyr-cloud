@@ -9,7 +9,9 @@
     "build:ios:simulator": "rock build:ios --destination simulator --build-folder ../build --local",
     "build:ios:simulator:release": "rock build:ios --destination simulator --configuration Release --build-folder ../build --local",
     "bundle:ios": "mkdir -p dist/ios && rock bundle-mf-host --entry-file index.js --platform ios --dev false --bundle-output dist/ios/host.bundle --sourcemap-output dist/ios/host.bundle.map",
-    "android": "rock run:android"
+    "android": "rock run:android",
+    "deploy:zephyr:ios": "react-native bundle-mf-host --entry-file index.js --platform ios --dev false --bundle-output dist/ios/host.bundle --sourcemap-output dist/ios/host.bundle.map",
+    "deploy:zephyr:android": "react-native bundle-mf-host --entry-file index.js --platform android --dev false --bundle-output dist/android/host.bundle --sourcemap-output dist/android/host.bundle.map"
   },
   "dependencies": {
     "@gronxb-super-app/store": "workspace:*",
@@ -22,10 +24,16 @@
     "@babel/preset-env": "^7.25.3",
     "@babel/runtime": "^7.25.0",
     "@module-federation/metro": "2.8.0",
+    "@module-federation/metro-plugin-rnc-cli": "2.8.0",
     "@module-federation/metro-plugin-rock": "2.8.0",
     "@module-federation/runtime": "2.8.0",
-    "@module-federation/metro-plugin-rnc-cli": "2.8.0",
     "@react-native/babel-preset": "0.84.1",
+    "@react-native/codegen": "0.84.1",
+    "@react-native/community-cli-plugin": "0.84.1",
+    "@react-native-community/cli": "20.1.3",
+    "@react-native-community/cli-platform-android": "20.1.3",
+    "@react-native-community/cli-platform-ios": "20.1.3",
+    "@react-native/gradle-plugin": "0.84.1",
     "@react-native/metro-config": "0.84.1",
     "@react-native/typescript-config": "0.84.1",
     "@rock-js/platform-android": "^0.14.1",
@@ -33,6 +41,7 @@
     "@rock-js/plugin-metro": "^0.14.1",
     "@rock-js/welcome-screen": "^0.14.1",
     "@types/react": "19.2.17",
+    "hermes-compiler": "250829098.0.9",
     "rock": "^0.14.1",
     "zephyr-metro-plugin": "^1.1.2"
   },
@@ -40,7 +49,7 @@
     "node": ">=20"
   },
   "zephyr:dependencies": {
-    "cart": "zephyr:cart@yourEnvironment",
-    "discover": "zephyr:discover@yourEnvironment"
+    "cart": "zephyr:zephyrcloudcartapp.super-app-wtih-zephyr-cloud.gronxb@production-local",
+    "discover": "zephyr:zephyrclouddiscoverapp.super-app-wtih-zephyr-cloud.gronxb@production-local"
   }
 }

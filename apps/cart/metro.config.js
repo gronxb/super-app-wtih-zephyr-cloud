@@ -17,6 +17,8 @@ const config = {
   },
 };
 
+const baseConfig = mergeConfig(getDefaultConfig(projectRoot), config);
+
 async function getConfig() {
   const zephyrConfig = await withZephyr()({
     name: 'cart',
@@ -28,19 +30,21 @@ async function getConfig() {
     shared: {
       '@gronxb-super-app/store': {
         singleton: true,
-        eager: false,
+        eager: true, // Host-First, If None standalone fallback
         requiredVersion: '^1.0.0',
         version: '1.0.0',
       },
       react: {
         singleton: true,
         eager: false,
-         requiredVersion: '19.2.7',
+        import: false,
+        requiredVersion: '19.2.7',
         version: '19.2.7',
       },
       'react-native': {
         singleton: true,
         eager: false,
+        import: false,
         requiredVersion: '0.84.1',
         version: '0.84.1',
       },
@@ -48,17 +52,13 @@ async function getConfig() {
     shareStrategy: 'loaded-first',
   });
 
-  return withModuleFederation(
-    mergeConfig(getDefaultConfig(__dirname), config),
-    zephyrConfig,
-    {
-      flags: {
-        unstable_patchHMRClient: true,
-        unstable_patchInitializeCore: true,
-        unstable_patchRuntimeRequire: true,
-      },
+  return withModuleFederation(baseConfig, zephyrConfig, {
+    flags: {
+      unstable_patchHMRClient: true,
+      unstable_patchInitializeCore: true,
+      unstable_patchRuntimeRequire: true,
     },
-  );
+  });
 }
 
 module.exports = getConfig();

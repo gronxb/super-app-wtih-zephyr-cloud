@@ -1,0 +1,74 @@
+diff --git a/dist/lib/zephyr-metro-command-wrapper.js b/dist/lib/zephyr-metro-command-wrapper.js
+index 7b8464bf552fe4a5fbd680dae8ba8e6938f3fd4d..933076634583ffd34c12c5841ecd33d115b6c1ae 100644
+--- a/dist/lib/zephyr-metro-command-wrapper.js
++++ b/dist/lib/zephyr-metro-command-wrapper.js
+@@ -1,9 +1,45 @@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.zephyrCommandWrapper = zephyrCommandWrapper;
++const fs_1 = require("node:fs");
++const path_1 = require("node:path");
+ const zephyr_agent_1 = require("zephyr-agent");
+ const metro_errors_1 = require("./internal/metro-errors");
+ const zephyr_metro_plugin_1 = require("./zephyr-metro-plugin");
++function preserveResolvedRemotesAcrossConfigReload(resolvedRemotes) {
++    const key = '__METRO_FEDERATION_CONFIG';
++    const descriptor = Object.getOwnPropertyDescriptor(global, key);
++    let currentConfig = global[key];
++    Object.defineProperty(global, key, {
++        configurable: true,
++        enumerable: descriptor?.enumerable ?? true,
++        get: () => currentConfig,
++        set: (nextConfig) => {
++            if (nextConfig?.remotes) {
++                Object.assign(nextConfig.remotes, resolvedRemotes);
++            }
++            currentConfig = nextConfig;
++        },
++    });
++    return () => {
++        Object.defineProperty(global, key, {
++            configurable: true,
++            enumerable: descriptor?.enumerable ?? true,
++            writable: true,
++            value: currentConfig,
++        });
++    };
++}
++async function syncHostManifest(context, cliOptions) {
++    const manifestPath = global.__METRO_FEDERATION_MANIFEST_PATH;
++    if (!manifestPath || !cliOptions.bundleOutput) {
++        return;
++    }
++    const bundleOutput = path_1.resolve(context, cliOptions.bundleOutput);
++    const outputManifest = path_1.join(path_1.dirname(bundleOutput), 'mf-manifest.json');
++    await fs_1.promises.mkdir(path_1.dirname(outputManifest), { recursive: true });
++    await fs_1.promises.copyFile(manifestPath, outputManifest);
++}
+ async function zephyrCommandWrapper(bundleFederatedRemote, loadMetroConfig, updateManifest) {
+     return async (...args) => {
+         try {
+@@ -28,9 +64,20 @@ async function zephyrCommandWrapper(bundleFederatedRemote, loadMetroConfig, upda
+             });
+             await zephyrMetroPlugin.beforeBuild();
+             updateManifest();
+-            const res = await bundleFederatedRemote(...args);
+-            await zephyrMetroPlugin.afterBuild();
+-            return res;
++            const resolvedRemotes = {
++                ...global.__METRO_FEDERATION_CONFIG.remotes,
++            };
++            const restoreFederationConfig = preserveResolvedRemotesAcrossConfigReload(resolvedRemotes);
++            try {
++                const res = await bundleFederatedRemote(...args);
++                updateManifest();
++                await syncHostManifest(context, args[2]);
++                await zephyrMetroPlugin.afterBuild();
++                return res;
++            }
++            finally {
++                restoreFederationConfig();
++            }
+         }
+         catch (error) {
+             const detail = error instanceof Error

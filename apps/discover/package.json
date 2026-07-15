@@ -6,7 +6,9 @@
     "start": "rock start --port 8083",
     "test:type": "tsc --noEmit",
     "ios": "rock run:ios",
-    "android": "rock run:android"
+    "android": "rock run:android",
+    "deploy:zephyr:ios": "react-native bundle-mf-remote --platform ios --dev false --output dist",
+    "deploy:zephyr:android": "react-native bundle-mf-remote --platform android --dev false --output dist"
   },
   "dependencies": {
     "@gronxb-super-app/store": "workspace:*",

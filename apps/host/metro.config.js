@@ -20,6 +20,7 @@ const config = {
   },
 };
 
+const baseConfig = mergeConfig(getDefaultConfig(projectRoot), config);
 
 const getConfig = async () => {
   const zephyrConfig = await withZephyr()({
@@ -51,17 +52,13 @@ const getConfig = async () => {
     shareStrategy: 'loaded-first',
   });
 
-  return withModuleFederation(
-    mergeConfig(getDefaultConfig(__dirname), config),
-    zephyrConfig,
-    {
-      flags: {
-        unstable_patchHMRClient: true,
-        unstable_patchInitializeCore: true,
-        unstable_patchRuntimeRequire: true,
-      },
+  return withModuleFederation(baseConfig, zephyrConfig, {
+    flags: {
+      unstable_patchHMRClient: true,
+      unstable_patchInitializeCore: true,
+      unstable_patchRuntimeRequire: true,
     },
-  );
+  });
 };
 
 module.exports = getConfig;

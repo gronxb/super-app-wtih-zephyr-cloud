@@ -4,7 +4,7 @@ const { updateManifest } = require('@module-federation/metro');
 const { zephyrCommandWrapper } = require('zephyr-metro-plugin');
 
 const wrappedFuncPromise = zephyrCommandWrapper(
-  commands.bundleMFRemoteCommand.func,
+  commands.bundleMFHostCommand.func,
   commands.loadMetroConfig,
   () => {
     updateManifest(
@@ -15,14 +15,19 @@ const wrappedFuncPromise = zephyrCommandWrapper(
 );
 
 const zephyrCommand = {
-  name: 'bundle-mf-remote',
-  description:
-    'Bundles a Module Federation remote, including its container entry and all exposed modules for consumption by host applications',
+  name: 'bundle-mf-host',
+  description: 'Bundles a Module Federation host with Zephyr Cloud',
   func: async (...args) => {
     const wrappedFunc = await wrappedFuncPromise;
     return wrappedFunc(...args);
   },
-  options: commands.bundleMFRemoteCommand.options,
+  options: [
+    ...commands.bundleMFHostCommand.options,
+    {
+      name: '--config-cmd [string]',
+      description: '[Internal] React Native Xcode bundling compatibility.',
+    },
+  ],
 };
 
 module.exports = {
