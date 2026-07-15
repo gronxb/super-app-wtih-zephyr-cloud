@@ -2,8 +2,28 @@
 
 A React Native super app built with Metro Module Federation and Zephyr Cloud. One native host loads the independently deployable `discover` and `cart` applications while sharing a common cart store.
 
-![Gronxb Market running on iOS](./docs/images/zephyr-release-discover.png)
-<img width="1206" height="2622" alt="simulator_screenshot_7EE35051-08C5-4733-A40E-1A469F25C352" src="https://github.com/user-attachments/assets/9a339007-8d49-4eeb-aaf8-c02beabc9aee" />
+<table>
+  <tr>
+    <th>Discover</th>
+    <th>Cart</th>
+  </tr>
+  <tr>
+    <td>
+      <img
+        src="./docs/images/zephyr-release-discover.png"
+        alt="Discover screen"
+        width="360"
+      />
+    </td>
+    <td>
+      <img
+        src="https://github.com/user-attachments/assets/9a339007-8d49-4eeb-aaf8-c02beabc9aee"
+        alt="Cart screen"
+        width="360"
+      />
+    </td>
+  </tr>
+</table>
 
 
 ## Architecture
@@ -94,10 +114,6 @@ Remote-only changes can be published without rebuilding the native host:
 ```bash
 pnpm --dir apps/discover deploy:zephyr:ios
 ```
-
-
-
-
 
 
 
