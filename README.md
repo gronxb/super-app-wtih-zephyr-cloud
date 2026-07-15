@@ -41,7 +41,11 @@ pnpm start
 
 Once all three development servers are running, open the installed app.
 
-[Watch the development demo](./docs/videos/module-federation-dev.mov)
+
+
+https://github.com/user-attachments/assets/ec70f9e2-b7a0-422b-8dd4-f34c645b646d
+
+
 
 ## Production test
 
@@ -73,4 +77,6 @@ pnpm deploy:zephyr:ios
 
 After both deployments finish, open the installed app and verify that the changes are delivered from Zephyr Cloud.
 
-[Watch the production demo](./docs/videos/module-federation-production.mov)
+
+Uploading module-federation-production.mov…
+
