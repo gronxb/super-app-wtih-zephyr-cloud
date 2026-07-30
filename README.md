@@ -129,6 +129,6 @@ pnpm --dir apps/discover deploy:zephyr:ios
 | `pnpm build:ios:simulator:release` | Build the release iOS Simulator host     |
 | `pnpm kill:ports`                  | Stop the local Metro development servers |
 
-## Metro Compatibility Patch
+## Metro Configuration
 
-The workspace applies [`patches/zephyr-metro-plugin.patch`](./patches/zephyr-metro-plugin.patch) through pnpm `patchedDependencies`. It preserves Zephyr-resolved remote configuration across the additional Metro configuration load performed by the current React Native CLI integration.
+Each app exports the concrete result of `withModuleFederation(...)` from its Metro config. Zephyr's React Native CLI integration resolves and deploys remotes without a local patch or vendored package.

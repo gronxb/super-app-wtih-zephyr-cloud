@@ -1,6 +1,5 @@
 const path = require('node:path');
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
-const { withZephyr } = require('zephyr-metro-plugin');
 const { withModuleFederation } = require('@module-federation/metro');
 
 const cartPort = process.env.CART_PORT ?? '8082';
@@ -22,43 +21,40 @@ const config = {
 
 const baseConfig = mergeConfig(getDefaultConfig(projectRoot), config);
 
-const getConfig = async () => {
-  const zephyrConfig = await withZephyr()({
-    name: 'hostApp',
-    remotes: {
-      cart: `cart@http://localhost:${cartPort}/mf-manifest.json`,
-      discover: `discover@http://localhost:${discoverPort}/mf-manifest.json`,
+/** @type {Parameters<typeof withModuleFederation>[1]} */
+const moduleFederationConfig = {
+  name: 'hostApp',
+  remotes: {
+    cart: `cart@http://localhost:${cartPort}/mf-manifest.json`,
+    discover: `discover@http://localhost:${discoverPort}/mf-manifest.json`,
+  },
+  shared: {
+    '@gronxb-super-app/store': {
+      singleton: true,
+      eager: true,
+      requiredVersion: '^1.0.0',
+      version: '1.0.0',
     },
-    shared: {
-      '@gronxb-super-app/store': {
-        singleton: true,
-        eager: true,
-        requiredVersion: '^1.0.0',
-        version: '1.0.0',
-      },
-      react: {
-        singleton: true,
-        eager: true,
-        requiredVersion: '19.2.7',
-        version: '19.2.7',
-      },
-      'react-native': {
-        singleton: true,
-        eager: true,
-        requiredVersion: '0.84.1',
-        version: '0.84.1',
-      },
+    react: {
+      singleton: true,
+      eager: true,
+      requiredVersion: '19.2.7',
+      version: '19.2.7',
     },
-    shareStrategy: 'loaded-first',
-  });
-
-  return withModuleFederation(baseConfig, zephyrConfig, {
-    flags: {
-      unstable_patchHMRClient: true,
-      unstable_patchInitializeCore: true,
-      unstable_patchRuntimeRequire: true,
+    'react-native': {
+      singleton: true,
+      eager: true,
+      requiredVersion: '0.84.1',
+      version: '0.84.1',
     },
-  });
+  },
+  shareStrategy: 'loaded-first',
 };
 
-module.exports = getConfig;
+module.exports = withModuleFederation(baseConfig, moduleFederationConfig, {
+  flags: {
+    unstable_patchHMRClient: true,
+    unstable_patchInitializeCore: true,
+    unstable_patchRuntimeRequire: true,
+  },
+});

@@ -19,9 +19,10 @@
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.3",
     "@babel/runtime": "^7.25.0",
-    "@module-federation/metro": "file:../../vendor/module-federation-metro-2.8.1.tgz",
-    "@module-federation/metro-plugin-rock": "2.8.0",
-    "@module-federation/runtime": "2.8.0",
+    "@module-federation/metro": "2.8.1",
+    "@module-federation/metro-plugin-rnc-cli": "2.8.1",
+    "@module-federation/metro-plugin-rock": "2.8.1",
+    "@module-federation/runtime": "2.8.1",
     "@react-native/babel-preset": "0.84.1",
     "@react-native/metro-config": "0.84.1",
     "@react-native/typescript-config": "0.84.1",
@@ -31,7 +32,7 @@
     "@rock-js/welcome-screen": "^0.14.1",
     "@types/react": "19.2.17",
     "rock": "^0.14.1",
-    "zephyr-metro-plugin": "^1.1.2"
+    "zephyr-metro-plugin": "1.2.0"
   },
   "peerDependencies": {},
   "engines": {
