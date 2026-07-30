@@ -117,6 +117,11 @@ pnpm --dir apps/discover deploy:zephyr:ios
 
 
 
+https://github.com/user-attachments/assets/33cf0772-487a-47f9-b7cf-418f9fcead55
+
+
+
+
 
 ## Workspace Commands
 
