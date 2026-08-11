@@ -43,7 +43,7 @@
     "@types/react": "19.2.17",
     "hermes-compiler": "250829098.0.9",
     "rock": "^0.14.1",
-    "zephyr-metro-plugin": "1.2.0"
+    "zephyr-metro-plugin": "file:../../vendor/zephyr-metro-plugin-1.1.2.tgz"
   },
   "engines": {
     "node": ">=20"

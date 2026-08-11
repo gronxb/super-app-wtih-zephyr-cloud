@@ -1,5 +1,6 @@
 const path = require('node:path');
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+const { withZephyr } = require('zephyr-metro-plugin');
 const { withModuleFederation } = require('@module-federation/metro');
 
 const cartPort = process.env.CART_PORT ?? '8082';
@@ -51,10 +52,20 @@ const moduleFederationConfig = {
   shareStrategy: 'loaded-first',
 };
 
-module.exports = withModuleFederation(baseConfig, moduleFederationConfig, {
-  flags: {
-    unstable_patchHMRClient: true,
-    unstable_patchInitializeCore: true,
-    unstable_patchRuntimeRequire: true,
-  },
-});
+const getConfig = async () => {
+  const zephyrConfig = await withZephyr({
+    name: moduleFederationConfig.name,
+    remotes: moduleFederationConfig.remotes,
+    target: process.env.ZEPHYR_TARGET === 'android' ? 'android' : 'ios',
+  })(baseConfig);
+
+  return withModuleFederation(zephyrConfig, moduleFederationConfig, {
+    flags: {
+      unstable_patchHMRClient: true,
+      unstable_patchInitializeCore: true,
+      unstable_patchRuntimeRequire: true,
+    },
+  });
+};
+
+module.exports = getConfig();
